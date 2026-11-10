@@ -18,3 +18,12 @@ try:
     with open(output_filename, mode='w', encoding='utf-8', newline='') as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow(["Deal Title", "Link URL"])
+
+        counter = 0
+
+        for deal in deals:
+            title_element = deal.find('h2', class_='entry-title')
+            title_text = title_element.text.strip() if title_element else "No title found"
+
+            link_element = title_element.find('a') if title_element else None
+            link_url = link_element['href'] if link_element and link_element.has_attr('href') else "No link found"
