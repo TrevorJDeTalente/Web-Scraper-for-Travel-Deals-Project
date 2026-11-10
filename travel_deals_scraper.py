@@ -27,3 +27,13 @@ try:
 
             link_element = title_element.find('a') if title_element else None
             link_url = link_element['href'] if link_element and link_element.has_attr('href') else "No link found"
+
+            writer.writerow([title_text, link_url])
+            counter += 1
+        
+    print(f"Scraped {counter} items and saved them to {output_filename}.")
+
+except requests.exceptions.RequestException as e:
+    print(f"Error fetching web data: {e}")
+except IOError as e:
+    print(f"Could not write data to file: {e}.")
