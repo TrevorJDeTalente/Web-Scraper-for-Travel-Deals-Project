@@ -16,7 +16,7 @@ def get_travel_deals():
 
         soup = BeautifulSoup(response.text, 'html.parser')
 
-        deal_cards = soup.find_all('article', class_='entry-card')
+        deal_cards = soup.find_all('a', class_='title-link')
 
         if not deal_cards:
             print("No deal cards found.")
@@ -25,18 +25,16 @@ def get_travel_deals():
         extracted_deals = []
 
         for card in deal_cards:
-            title_element = card.find('h2', class_='title-link')
-            title_text = title_element.text.strip() if title_element else "Unknown destination"
-        
-            link_element = title_element.find('a') if title_element else None
-            link_url = link_element['href']if link_element and link_element.has_attr('href') else "Link unavailable"
+            title_text = card.text.strip() if card.text else "Unknown Destination"
+            link_url = card.get('href', 'Link unavailable')
 
             extracted_deals.append({
-                "Title": title_text,
+                "Title" : title_text,
                 "Link" : link_url
             })
 
         return extracted_deals
+
     except requests.exceptions.RequestException as e:
         print(f"Could not connect: {e}")
         return []
